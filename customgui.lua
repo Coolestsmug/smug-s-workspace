@@ -169,12 +169,6 @@ function library.createTab(name,order)
   local pad = Instance.new("UIPadding",scroll)
   table.insert(tabList, scroll)
   order = math.clamp(tonumber(order) or 1,#tabList,999)
-  if order < 999 then
-    local i = 1
-    while usedOrders[i] do i += 1 end
-    order = i
-  end
-  usedOrders[order] = true
   scroll.LayoutOrder = order
   scroll.Size = UDim2.new(1,0,1,-1)
   scroll.Position = UDim2.new(0,0,1,0)
@@ -205,7 +199,7 @@ function library.createTab(name,order)
       targets = scr
     end
   end
-  scroll.Visible = (order == targets)
+  scroll.Visible = (scroll == targets)
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
