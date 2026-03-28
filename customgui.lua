@@ -161,13 +161,21 @@ knownframe.BackgroundColor3 = guiset.altcolor
 
 local library={}
 local tabList = {}
+local usedOrders = {}
 function library.createTab(name,order)
   local scroll = Instance.new("ScrollingFrame",frame)
   local tabButton = Instance.new("TextButton",scrollTab)
   local list = Instance.new("UIListLayout",scroll)
   local pad = Instance.new("UIPadding",scroll)
   table.insert(tabList, scroll)
-  order = math.min(tonumber(order) or 1,999)
+  order = math.clamp(tonumber(order) or 1,#tabList,999)
+  if order < 999 then
+    local i = 1
+    while usedOrders[i] do i += 1 end
+    order = i
+  end
+  usedOrders[order] = true
+  scroll.LayoutOrder = order
   scroll.Size = UDim2.new(1,0,1,-1)
   scroll.Position = UDim2.new(0,0,1,0)
   scroll.AnchorPoint = Vector2.new(0,1)
@@ -190,12 +198,14 @@ function library.createTab(name,order)
   list.Padding = UDim.new(0,3)
   list.HorizontalAlignment = "Center"
   local lowest = math.huge
+  local targets
   for _,scr in ipairs(tabList) do
     if scr.LayoutOrder < lowest then
       lowest = scr.LayoutOrder
+      targets = scr
     end
   end
-  scroll.Visible = (order == lowest)
+  scroll.Visible = (order == targets)
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
