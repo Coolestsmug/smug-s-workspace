@@ -70,10 +70,10 @@ local grid = Instance.new("UIGridLayout")
 grid.Parent = scrollmark
 grid.CellSize = UDim2.new(.5, -8, 0, 22)
 grid.CellPadding = UDim2.new(0, 2, 0, 2)
-grid.FillDirection = Enum.FillDirection.Horizontal
+grid.FillDirection = "Horizontal"
 grid.FillDirectionMaxCells = 2
-grid.HorizontalAlignment = Enum.HorizontalAlignment.Center
-grid.VerticalAlignment = Enum.VerticalAlignment.Top
+grid.HorizontalAlignment = "Center"
+grid.VerticalAlignment = "Top"
 
 local closeButton = Instance.new("TextButton")
 closeButton.BorderSizePixel = 1
@@ -147,6 +147,12 @@ scrollTab.ScrollingDirection = "X"
 scrollTab.AutomaticCanvasSize = "X"
 scrollTab.ScrollBarThickness = 0
 scrollTab.Parent = frame
+local tablist = Instance.new("UIListLayout",scrollTab)
+tablist.Padding = UDim.new(0,0)
+tablist.SortOrder = "LayoutOrder"
+tablist.HorizontalAlignment = "Left"
+tablist.VerticalAlignment = "Center"
+
 local knownframe = Instance.new("Frame")
 knownframe.Size = UDim2.new(.95,0,0,20)
 knownframe.AnchorPoint = Vector2.new(.5,0)
@@ -155,11 +161,13 @@ knownframe.BackgroundColor3 = guiset.altcolor
 
 local library={}
 local tabList = {}
-function library.createTab(name)
+function library.createTab(name,order)
   local scroll = Instance.new("ScrollingFrame",frame)
   local tabButton = Instance.new("TextButton",scrollTab)
   local list = Instance.new("UIListLayout",scroll)
   local pad = Instance.new("UIPadding",scroll)
+  table.insert(tabList, scroll)
+  order = math.clamp(tonumber(order) or 1,#tabList,999)
   scroll.Size = UDim2.new(1,0,1,-1)
   scroll.Position = UDim2.new(0,0,1,0)
   scroll.AnchorPoint = Vector2.new(0,1)
@@ -168,8 +176,8 @@ function library.createTab(name)
   scroll.ScrollBarThickness = 0
   scroll.ScrollingDirection = "Y"
   scroll.AutomaticCanvasSize = "Y"
+  tabButton.LayoutOrder = order
   tabButton.Size = UDim2.new(0,45,0,22)
-  tabButton.Position = UDim2.new(0,#tabList * 46,.5,0)
   tabButton.AnchorPoint = Vector2.new(0,.5)
   tabButton.BackgroundColor3 = guiset.maincolor
   tabButton.BorderSizePixel = 1
@@ -181,8 +189,13 @@ function library.createTab(name)
   pad.PaddingTop = UDim.new(0,2)
   list.Padding = UDim.new(0,3)
   list.HorizontalAlignment = "Center"
-  table.insert(tabList, scroll)
-  scroll.Visible = #tabList == 1
+  local lowest = math.huge
+  for _,scr in ipairs(tabList) do
+    if scr.LayoutOrder < lowest then
+      lowest = scr.LayoutOrder
+    end
+  end
+  scroll.Visible = (ord == lowest)
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
@@ -256,15 +269,15 @@ function library.textbox(t,t2,p,f)
   l.BackgroundTransparency = 1
   l.Position = UDim2.new(0,4,0,0)
   l.Size = UDim2.new(0,0,1,0)
-  l.TextXAlignment = Enum.TextXAlignment.Left
+  l.TextXAlignment = "Left"
   l.TextColor3 = guiset.textcolor
   l.ClipsDescendants = true
   l.Text = t.." :"
   l.TextSize = guiset.size
   l.Font = guiset.font
-  l.AutomaticSize = Enum.AutomaticSize.X
+  l.AutomaticSize = "X"
   b.BackgroundTransparency = 1
-  b.TextXAlignment = Enum.TextXAlignment.Right
+  b.TextXAlignment = "Right"
   b.PlaceholderText = t2
   b.ClipsDescendants = true
   b.Text = ""
@@ -295,7 +308,7 @@ function library.switch(t,p,f,lst)
   b.Size = UDim2.new(.95,0,1,0)
   b.AnchorPoint = Vector2.new(.5,.5)
   b.Position = UDim2.new(.5,0,.5,0)
-  b.TextXAlignment = Enum.TextXAlignment.Left
+  b.TextXAlignment = "Left"
   b.Text = t.." :"
   b.TextSize = guiset.size
   b.Font = guiset.font
@@ -305,7 +318,7 @@ function library.switch(t,p,f,lst)
   l.Size = UDim2.new(.95,0,.8,0)
   l.AnchorPoint = Vector2.new(.5,.5)
   l.Position = UDim2.new(.5,0,.5,0)
-  l.TextXAlignment = Enum.TextXAlignment.Right
+  l.TextXAlignment = "Right"
   l.TextSize = guiset.size
   l.Font = guiset.font
   l.TextColor3 = guiset.textcolor
@@ -360,12 +373,12 @@ function library.markdown(t,p,f,l,m)
   lbl.TextSize = guiset.size
   lbl.Font = guiset.font
   lbl.TextColor3 = guiset.textcolor
-  lbl.AutomaticSize = Enum.AutomaticSize.X
+  lbl.AutomaticSize = "X"
   btn.Position = UDim2.new(1,-4,0,0)
   btn.AnchorPoint = Vector2.new(1,0)
   btn.Size = UDim2.new(1,-4,1,0)
   btn.BackgroundTransparency = 1
-  btn.TextXAlignment = Enum.TextXAlignment.Right
+  btn.TextXAlignment = "Right"
   btn.Text = "[ 0 ]"
   btn.TextSize = guiset.size
   btn.Font = guiset.font
@@ -580,7 +593,7 @@ function library.label(t,p)
   return l
 end
 
-local awesomesets = library.createTab("Settings")
+local awesomesets = library.createTab("Settings",999)
 library.switch("gui side", awesomesets, function(v)
   guiset.side = v
   closeButton.Position = v == "left" and UDim2.new(1,1,0,1) or UDim2.new(0,-1,0,1)
