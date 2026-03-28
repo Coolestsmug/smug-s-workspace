@@ -161,7 +161,6 @@ knownframe.BackgroundColor3 = guiset.altcolor
 
 local library={}
 local tabList = {}
-local usedOrders = {}
 function library.createTab(name,order)
   local scroll = Instance.new("ScrollingFrame",frame)
   local tabButton = Instance.new("TextButton",scrollTab)
@@ -191,15 +190,6 @@ function library.createTab(name,order)
   pad.PaddingTop = UDim.new(0,2)
   list.Padding = UDim.new(0,3)
   list.HorizontalAlignment = "Center"
-  local lowest = math.huge
-  local targets
-  for _,scr in ipairs(tabList) do
-    if scr.LayoutOrder < lowest then
-      lowest = scr.LayoutOrder
-      targets = scr
-    end
-  end
-  scroll.Visible = (scroll == targets)
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
@@ -341,7 +331,7 @@ function library.switch(t,p,f,lst)
   return {
     bool = function() return lst[i] end,
     index = function() return i end,
-    fire = function(_,v)
+    fire = function(v)
       if v==nil then
         a(i+1 > #lst and 1 or i+1)
       elseif type(v)=="number" then
@@ -352,7 +342,7 @@ function library.switch(t,p,f,lst)
         end
       end
     end,
-    set = function(_,v)
+    set = function(v)
       for k,val in ipairs(lst) do
         if val==v then a(k) break end
       end
