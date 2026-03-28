@@ -150,8 +150,8 @@ scrollTab.Parent = frame
 local tablist = Instance.new("UIListLayout",scrollTab)
 tablist.Padding = UDim.new(0,0)
 tablist.SortOrder = "LayoutOrder"
+tablist.FillDirection = "Horizontal"
 tablist.HorizontalAlignment = "Left"
-tablist.VerticalAlignment = "Center"
 
 local knownframe = Instance.new("Frame")
 knownframe.Size = UDim2.new(.95,0,0,20)
