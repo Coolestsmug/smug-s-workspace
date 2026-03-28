@@ -195,7 +195,7 @@ function library.createTab(name,order)
       lowest = scr.LayoutOrder
     end
   end
-  scroll.Visible = (ord == lowest)
+  scroll.Visible = (order == lowest)
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
