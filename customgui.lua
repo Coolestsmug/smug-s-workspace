@@ -173,7 +173,8 @@ function library.createTab(name)
   local pad = Instance.new("UIPadding",scroll)
   table.insert(tabList, scroll)
   scroll.Visible = #tabList <= 2
-  scroll.Size = UDim2.new(1,0,1,-1)
+  scroll.Size = UDim2.new(1,0,1,0)
+  scroll.CanvasSize = UDim2.new(0,0,0,0)
   scroll.Position = UDim2.new(0,0,1,0)
   scroll.AnchorPoint = Vector2.new(0,1)
   scroll.BackgroundColor3 = guiset.maincolor
