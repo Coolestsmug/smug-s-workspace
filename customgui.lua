@@ -132,8 +132,8 @@ end)
 
 uis.InputChanged:Connect(function(i)
   if inputdrag == i and dragging and (i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch) then
-    local newY = math.clamp(frameStartY + ((i.Position.Y - dragStartY) / gui.AbsoluteSize.Y),0, 1 - (frame.AbsoluteSize.Y / gui.AbsoluteSize.Y))
-    frame.Position = UDim2.new(frame.Position.X.Scale, frame.Position.X.Offset,newY, 0)
+    local newY = math.clamp(frameStartY + ((i.Position.Y - dragStartY) / gui.AbsoluteSize.Y),0,1 - (frame.AbsoluteSize.Y / gui.AbsoluteSize.Y))
+    frame.Position = UDim2.new(frame.Position.X.Scale,frame.Position.X.Offset,newY,0)
   end
 end)
 
@@ -169,7 +169,6 @@ function library.createTab(name)
   local pad = Instance.new("UIPadding",scroll)
   table.insert(tabList, scroll)
   scroll.Visible = #tabList <= 2
-  scroll.LayoutOrder = #tabList == 1 and 2 or 1
   scroll.Size = UDim2.new(1,0,1,-1)
   scroll.Position = UDim2.new(0,0,1,0)
   scroll.AnchorPoint = Vector2.new(0,1)
@@ -178,7 +177,7 @@ function library.createTab(name)
   scroll.ScrollBarThickness = 0
   scroll.ScrollingDirection = "Y"
   scroll.AutomaticCanvasSize = "Y"
-  tabButton.LayoutOrder = order
+  tabButton.LayoutOrder = #tabList == 1 and 2 or 1
   tabButton.Size = UDim2.new(0,45,0,22)
   tabButton.AnchorPoint = Vector2.new(0,.5)
   tabButton.BackgroundColor3 = guiset.maincolor
