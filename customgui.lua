@@ -68,6 +68,10 @@ scrollmark.BorderSizePixel = 0
 scrollmark.ScrollBarThickness = 0
 scrollmark.ScrollingDirection = "Y"
 scrollmark.AutomaticCanvasSize = "Y"
+local pad = Instance.new("UIPadding",scrollmark)
+pad.PaddingTop = UDim.new(0,2)
+pad.PaddingBottom = UDim.new(0,2)
+
 local grid = Instance.new("UIGridLayout")
 grid.Parent = scrollmark
 grid.CellSize = UDim2.new(.5, -8, 0, 22)
@@ -188,6 +192,7 @@ function library.createTab(name)
   tabButton.Font = guiset.font
   tabButton.TextColor3 = guiset.textcolor
   pad.PaddingTop = UDim.new(0,2)
+  pad.PaddingBottom = UDim.new(0,2)
   list.Padding = UDim.new(0,3)
   list.HorizontalAlignment = "Center"
   tabButton.MouseButton1Click:Connect(function()
