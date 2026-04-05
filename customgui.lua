@@ -7,7 +7,7 @@ local uis = game:GetService("UserInputService")
 local ts = game:GetService("TweenService")
 
 guiset = {
-  side = "left",font = Enum.Font.Highway,size = 12,
+  side = "right",font = Enum.Font.Highway,size = 12,
   downinfo = TweenInfo.new(.1,Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
   upinfo = TweenInfo.new(.3,Enum.EasingStyle.Sine, Enum.EasingDirection.Out),
   tween = TweenInfo.new(.35,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
@@ -42,6 +42,8 @@ frame.BorderColor3 = guiset.bordercolor
 frame.Size = UDim2.new(0,150,0,121)
 frame.Position = UDim2.new(0,1,.4,0)
 frame.AnchorPoint = Vector2.new(0,.5)
+frame.AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,.5)
+frame.Position = guiset.side == "left" and UDim2.new(0,1,.4,0) or UDim2.new(1,-1,.4,0)
 frame.BackgroundColor3 = guiset.bordercolor
 frame.Active = false
 frame.Parent = gui
@@ -80,19 +82,18 @@ closeButton.BorderSizePixel = 1
 closeButton.BorderColor3 = guiset.bordercolor
 closeButton.BackgroundColor3 = guiset.maincolor
 closeButton.Size = UDim2.new(0,25,1,-1.5)
-closeButton.Position = UDim2.new(1,1,0,1)
-closeButton.AnchorPoint = Vector2.new(0,0)
+closeButton.Position = guiset.side == "left" and UDim2.new(1,1,0,1) or UDim2.new(0,-1,0,1)
+closeButton.AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,0)
 closeButton.Text = ""
 closeButton.Parent = frame
 
 local open = true
 closeButton.MouseButton1Click:Connect(function()
   open = not open
-  ts:Create(frame, TweenInfo.new(.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+  ts:Create(frame, TweenInfo.new(.25,Enum.EasingStyle.Sine,Enum.EasingDirection.Out),{
     AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,.5),
     Position = guiset.side == "left"
-      and (UDim2.new(0,open and 0 or -frame.AbsoluteSize.X,frame.Position.Y.Scale,0))
-      or (UDim2.new(1,open and 0 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0))
+      and (UDim2.new(0,open and 1 or -frame.AbsoluteSize.X,frame.Position.Y.Scale,0)) or (UDim2.new(1,open and -1 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0))
   }):Play()
 end)
 
@@ -161,14 +162,14 @@ knownframe.BackgroundColor3 = guiset.altcolor
 
 local library={}
 local tabList = {}
-function library.createTab(name,order)
+function library.createTab(name)
   local scroll = Instance.new("ScrollingFrame",frame)
   local tabButton = Instance.new("TextButton",scrollTab)
   local list = Instance.new("UIListLayout",scroll)
   local pad = Instance.new("UIPadding",scroll)
   table.insert(tabList, scroll)
-  order = math.clamp(tonumber(order) or 1,#tabList,999)
-  scroll.LayoutOrder = order
+  scroll.Visible = #tabList <= 2
+  scroll.LayoutOrder = #tabList == 1 and 2 or 1
   scroll.Size = UDim2.new(1,0,1,-1)
   scroll.Position = UDim2.new(0,0,1,0)
   scroll.AnchorPoint = Vector2.new(0,1)
@@ -587,16 +588,14 @@ function library.label(t,p)
   return l
 end
 
-local awesomesets = library.createTab("Settings",999)
+local awesomesets = library.createTab("Settings")
 library.switch("gui side", awesomesets, function(v)
   guiset.side = v
   closeButton.Position = v == "left" and UDim2.new(1,1,0,1) or UDim2.new(0,-1,0,1)
   closeButton.AnchorPoint = Vector2.new(v == "left" and 0 or 1,0)
   frame.AnchorPoint = Vector2.new(v == "left" and 0 or 1,.5)
-  frame.Position = v == "left"
-    and UDim2.new(0, open and 0 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0)
-    or UDim2.new(1, open and 0 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0)
-end, {"left","right"})
+  frame.Position = v == "left" and UDim2.new(0,open and 1 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0) or UDim2.new(1,open and -1 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0)
+end, {"right","left"})
 library.button("delete gui",awesomesets,function()
   gui:Destroy()
 end)
