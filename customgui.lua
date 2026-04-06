@@ -71,11 +71,10 @@ scrollmark.AutomaticCanvasSize = "Y"
 local pad = Instance.new("UIPadding",scrollmark)
 pad.PaddingTop = UDim.new(0,4)
 pad.PaddingBottom = UDim.new(0,5)
-
 local grid = Instance.new("UIGridLayout")
 grid.Parent = scrollmark
-grid.CellSize = UDim2.new(.5, -8, 0, 22)
-grid.CellPadding = UDim2.new(0, 2, 0, 2)
+grid.CellSize = UDim2.new(.5,-4,0,22)
+grid.CellPadding = UDim2.new(0,3,0,3)
 grid.FillDirection = "Horizontal"
 grid.FillDirectionMaxCells = 2
 grid.HorizontalAlignment = "Center"
@@ -85,8 +84,8 @@ local closeButton = Instance.new("TextButton")
 closeButton.BorderSizePixel = 1
 closeButton.BorderColor3 = guiset.bordercolor
 closeButton.BackgroundColor3 = guiset.maincolor
-closeButton.Size = UDim2.new(0,25,1,-1.5)
-closeButton.Position = guiset.side == "left" and UDim2.new(1,1,0,1) or UDim2.new(0,-1,0,1)
+closeButton.Size = UDim2.new(0,25,1,0)
+closeButton.Position = guiset.side == "left" and UDim2.new(1,1,0,0) or UDim2.new(0,-1,0,0)
 closeButton.AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,0)
 closeButton.Text = ""
 closeButton.Parent = frame
@@ -574,7 +573,7 @@ end
 
 function library.label(t,p)
   local fb = knownframe:Clone()
-  fb.Size = UDim2.new(.95,0,0,10)
+  fb.Size = UDim2.new(.95,0,0,12)
   fb.Parent = p
   local l = Instance.new("TextLabel",fb)
   l.BackgroundTransparency = 1
@@ -594,7 +593,7 @@ end
 local awesomesets = library.createTab("Settings")
 library.switch("gui side", awesomesets, function(v)
   guiset.side = v
-  closeButton.Position = v == "left" and UDim2.new(1,1,0,1) or UDim2.new(0,-1,0,1)
+  closeButton.Position = v == "left" and UDim2.new(1,1,0,0) or UDim2.new(0,-1,0,0)
   closeButton.AnchorPoint = Vector2.new(v == "left" and 0 or 1,0)
   frame.AnchorPoint = Vector2.new(v == "left" and 0 or 1,.5)
   frame.Position = v == "left" and UDim2.new(0,open and 1 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0) or UDim2.new(1,open and -1 or frame.AbsoluteSize.X,frame.Position.Y.Scale,0)
