@@ -161,7 +161,7 @@ local scrollTab = mk("ScrollingFrame",frame,{
   ScrollBarThickness = 0,
   BackgroundColor3 = guiset.maincolor,BorderColor3 = guiset.bordercolor,
 })
-mk("UIListLayout",scrolltab,{
+mk("UIListLayout",scrollTab,{
   Padding = UDim.new(0,0),
   SortOrder = "LayoutOrder",
   FillDirection = "Horizontal",
@@ -615,7 +615,7 @@ end
 
 function library.label(t,p)
   local fb = knownframe:Clone()
-  fb.Size = UDim2.new(.95,0,0,12)
+  fb.Size = UDim2.new(.95,0,0,13)
   fb.Parent = p
   local l = mk("TextLabel", fb, {
     Size = UDim2.new(.95,0,.8,0),
@@ -629,7 +629,7 @@ function library.label(t,p)
   })
 
   l:GetPropertyChangedSignal("TextBounds"):Connect(function()
-    fb.Size = UDim2.new(.95,0,0,math.min(l.TextBounds.Y + 5, 12))
+    fb.Size = UDim2.new(.95,0,0,math.max(l.TextBounds.Y + 5, 13))
   end)
   l.Text = t
   return l
