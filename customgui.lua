@@ -197,7 +197,7 @@ function library.createTab(name)
   mk("UIListLayout",scroll,{Padding = UDim.new(0,3),HorizontalAlignment = "Center"})
   mk("UIPadding",scroll,{PaddingTop = UDim.new(0,4),PaddingBottom = UDim.new(0,4)})
   table.insert(tabList, scroll)
-  tabButton.LayoutOrder = #tabList == 1 and 10 or 1,
+  tabButton.LayoutOrder = #tabList == 1 and 10 or 1
   if #tabList <= 2 then scroll.Visible = true end
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
