@@ -187,7 +187,6 @@ function library.createTab(name)
     Visible = false
   })
   local tabButton = mk("TextButton",scrollTab,{
-    LayoutOrder = #tabList == 1 and 2 or 1,
     Size = UDim2.new(0,45,0,22),
     AnchorPoint = Vector2.new(0,.5),
     BorderSizePixel = 1,
@@ -198,6 +197,7 @@ function library.createTab(name)
   mk("UIListLayout",scroll,{Padding = UDim.new(0,3),HorizontalAlignment = "Center"})
   mk("UIPadding",scroll,{PaddingTop = UDim.new(0,4),PaddingBottom = UDim.new(0,4)})
   table.insert(tabList, scroll)
+  tabButton.LayoutOrder = #tabList == 1 and 10 or 1,
   if #tabList <= 2 then scroll.Visible = true end
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
@@ -629,7 +629,7 @@ function library.label(t,p)
   })
 
   l:GetPropertyChangedSignal("TextBounds"):Connect(function()
-    fb.Size = UDim2.new(.95,0,0,math.max(l.TextBounds.Y + 5, 13))
+    fb.Size = UDim2.new(.95,0,0,math.max(l.TextBounds.Y + 3, 13))
   end)
   l.Text = t
   return l
