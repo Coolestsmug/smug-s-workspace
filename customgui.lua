@@ -16,7 +16,20 @@ guiset = {
   altcolor = Color3.fromRGB(110,110,110),
   textcolor = Color3.fromRGB(230,230,230),
   select = Color3.fromRGB(170,170,170),
+  gray1 = Color3.fromRGB(80,80,80),
+  gray2 = Color3.fromRGB(160,160,160),
 }
+
+local function mk(class, parent, props)
+  local o = Instance.new(class)
+  if parent then o.Parent = parent end
+  if props then
+    for k,v in pairs(props) do
+      o[k] = v
+    end
+  end
+  return o
+end
 
 local function rounded(n, dec)
   dec = dec or 2
@@ -32,63 +45,64 @@ local function autobuttoncolor(btn, frame, base, down)
   btn.InputEnded:Connect(function() ts:Create(frame, guiset.upinfo, {BackgroundColor3 = base}):Play() end)
 end
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "co"
-gui.Parent = game:GetService("CoreGui")
+local gui = mk("ScreenGui",game:GetService("CoreGui"),{
+  Name = "co"
+})
 
-local frame = Instance.new("Frame")
-frame.BorderSizePixel = 1
-frame.BorderColor3 = guiset.bordercolor
-frame.Size = UDim2.new(0,150,0,121)
-frame.Position = UDim2.new(0,1,.4,0)
-frame.AnchorPoint = Vector2.new(0,.5)
-frame.AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,.5)
-frame.Position = guiset.side == "left" and UDim2.new(0,1,.4,0) or UDim2.new(1,-1,.4,0)
-frame.BackgroundColor3 = guiset.bordercolor
-frame.Active = false
-frame.Parent = gui
+local frame = mk("Frame",gui,{
+  BorderSizePixel = 1,
+  BorderColor3 = guiset.bordercolor,
+  Size = UDim2.new(0,150,0,121),
+  Position = UDim2.new(0,1,.4,0),
+  AnchorPoint = Vector2.new(0,.5),
+  AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,.5),
+  Position = guiset.side == "left" and UDim2.new(0,1,.4,0) or UDim2.new(1,-1,.4,0),
+  BackgroundColor3 = guiset.bordercolor,
+  Active = false
+})
 
-local frame2  = Instance.new("Frame")
-frame2.BorderSizePixel = 1
-frame2.BorderColor3 = guiset.bordercolor
-frame2.Size = UDim2.new(1,0,0,90)
-frame2.Position = UDim2.new(0,0,1,1)
-frame2.AnchorPoint = Vector2.new(0,0)
-frame2.BackgroundColor3 = guiset.bordercolor
-frame2.Active = false
-frame2.Visible = false
-frame2.Parent = frame
-local scrollmark = Instance.new("ScrollingFrame",frame2)
-scrollmark.Size = UDim2.new(1,0,1,0)
-scrollmark.Position = UDim2.new(.5,0,.5,0)
-scrollmark.AnchorPoint = Vector2.new(.5,.5)
-scrollmark.BackgroundColor3 = guiset.maincolor
-scrollmark.CanvasSize = UDim2.new(0,0,.5,0)
-scrollmark.BorderSizePixel = 0
-scrollmark.ScrollBarThickness = 0
-scrollmark.ScrollingDirection = "Y"
-scrollmark.AutomaticCanvasSize = "Y"
-local pad = Instance.new("UIPadding",scrollmark)
-pad.PaddingTop = UDim.new(0,4)
-pad.PaddingBottom = UDim.new(0,5)
-local grid = Instance.new("UIGridLayout")
-grid.Parent = scrollmark
-grid.CellSize = UDim2.new(.5,-4,0,22)
-grid.CellPadding = UDim2.new(0,3,0,3)
-grid.FillDirection = "Horizontal"
-grid.FillDirectionMaxCells = 2
-grid.HorizontalAlignment = "Center"
-grid.VerticalAlignment = "Top"
-
-local closeButton = Instance.new("TextButton")
-closeButton.BorderSizePixel = 1
-closeButton.BorderColor3 = guiset.bordercolor
-closeButton.BackgroundColor3 = guiset.maincolor
-closeButton.Size = UDim2.new(0,25,1,0)
-closeButton.Position = guiset.side == "left" and UDim2.new(1,1,0,0) or UDim2.new(0,-1,0,0)
-closeButton.AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,0)
-closeButton.Text = ""
-closeButton.Parent = frame
+local frame2  = mk("Frame",frame,{
+  BorderSizePixel = 1,
+  BorderColor3 = guiset.bordercolor,
+  Size = UDim2.new(1,0,0,90),
+  Position = UDim2.new(0,0,1,1),
+  AnchorPoint = Vector2.new(0,0),
+  BackgroundColor3 = guiset.bordercolor,
+  Active = false,
+  Visible = false,
+})
+local scrollmark = mk("ScrollingFrame",frame2,{
+  Size = UDim2.new(1,0,1,0),
+  Position = UDim2.new(.5,0,.5,0),
+  AnchorPoint = Vector2.new(.5,.5),
+  BackgroundColor3 = guiset.maincolor,
+  CanvasSize = UDim2.new(0,0,.5,0),
+  BorderSizePixel = 0,
+  ScrollBarThickness = 0,
+  ScrollingDirection = "Y",
+  AutomaticCanvasSize = "Y",
+})
+local pad = mk("UIPadding",scrollmark,{
+  PaddingTop = UDim.new(0,4),
+  PaddingBottom = UDim.new(0,5)
+})
+local grid = mk("UIGridLayout",scrollmark,{
+  CellSize = UDim2.new(.5,-4,0,22),
+  CellPadding = UDim2.new(0,3,0,3),
+  FillDirection = "Horizontal",
+  FillDirectionMaxCells = 2,
+  HorizontalAlignment = "Center",
+  VerticalAlignment = "Top"
+})
+local closeButton = mk("TextButton",frame,{
+  BorderSizePixel = 1,
+  BorderColor3 = guiset.bordercolor,
+  BackgroundColor3 = guiset.maincolor,
+  Size = UDim2.new(0,25,1,0),
+  Position = guiset.side == "left" and UDim2.new(1,1,0,0) or UDim2.new(0,-1,0,0),
+  AnchorPoint = Vector2.new(guiset.side == "left" and 0 or 1,0),
+  Text = ""
+})
 
 local open = true
 closeButton.MouseButton1Click:Connect(function()
@@ -163,36 +177,32 @@ knownframe.AnchorPoint = Vector2.new(.5,0)
 knownframe.BorderSizePixel = 0
 knownframe.BackgroundColor3 = guiset.altcolor
 
-local library={}
+local library = {}
 local tabList = {}
 function library.createTab(name)
-  local scroll = Instance.new("ScrollingFrame",frame)
-  local tabButton = Instance.new("TextButton",scrollTab)
-  local list = Instance.new("UIListLayout",scroll)
-  local pad = Instance.new("UIPadding",scroll)
+  local scroll = mk("ScrollingFrame",frame,{
+    Size = UDim2.new(1,0,1,0),
+    CanvasSize = UDim2.new(0,0,.5,0),
+    BackgroundColor3 = guiset.maincolor,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 0,
+    ScrollingDirection = "Y",
+    AutomaticCanvasSize = "Y",
+    Visible = false
+  })
+  local tabButton = mk("TextButton",scrollTab,{
+    LayoutOrder = #tabList == 1 and 2 or 1,
+    Size = UDim2.new(0,45,0,22),
+    AnchorPoint = Vector2.new(0,.5),
+    BorderSizePixel = 1,
+    Text = name,
+    BackgroundColor3 = guiset.maincolor,BorderColor3 = guiset.bordercolor,
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  mk("UIListLayout",scroll,{Padding = UDim.new(0,3),HorizontalAlignment = "Center"})
+  mk("UIPadding",scroll,{PaddingTop = UDim.new(0,4),PaddingBottom = UDim.new(0,4)})
   table.insert(tabList, scroll)
-  scroll.Visible = #tabList <= 2
-  scroll.Size = UDim2.new(1,0,1,0)
-  scroll.CanvasSize = UDim2.new(0,0,.5,0)
-  scroll.BackgroundColor3 = guiset.maincolor
-  scroll.BorderSizePixel = 0
-  scroll.ScrollBarThickness = 0
-  scroll.ScrollingDirection = "Y"
-  scroll.AutomaticCanvasSize = "Y"
-  tabButton.LayoutOrder = #tabList == 1 and 2 or 1
-  tabButton.Size = UDim2.new(0,45,0,22)
-  tabButton.AnchorPoint = Vector2.new(0,.5)
-  tabButton.BackgroundColor3 = guiset.maincolor
-  tabButton.BorderSizePixel = 1
-  tabButton.BorderColor3 = guiset.bordercolor
-  tabButton.Text = name
-  tabButton.TextSize = guiset.size
-  tabButton.Font = guiset.font
-  tabButton.TextColor3 = guiset.textcolor
-  pad.PaddingTop = UDim.new(0,4)
-  pad.PaddingBottom = UDim.new(0,4)
-  list.Padding = UDim.new(0,3)
-  list.HorizontalAlignment = "Center"
+  if #tabList <= 2 then scroll.Visible = true end
   tabButton.MouseButton1Click:Connect(function()
     for _,scr in ipairs(tabList) do scr.Visible = false end
     scroll.Visible = true
@@ -203,18 +213,17 @@ end
 function library.button(t,p,f)
   local fb = knownframe:Clone()
   fb.Parent = p
-  local b = Instance.new("TextButton",fb)
-  b.BackgroundTransparency = 1
-  b.Size = UDim2.new(.95,0,1,0)
-  b.AnchorPoint = Vector2.new(.5,.5)
-  b.Position = UDim2.new(.5,0,.5,0)
-  b.TextXAlignment = "Left"
-  b.ClipsDescendants = true
-  b.Text = t
-  b.TextSize = guiset.size
-  b.Font = guiset.font
-  b.TextColor3 = guiset.textcolor
-  b.MouseButton1Click:Connect(f)
+  local b = mk("TextButton",fb,{
+    BackgroundTransparency = 1,
+    Size = UDim2.new(.95,0,1,0),
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextXAlignment = "Left",
+    ClipsDescendants = true,
+    Text = t,
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  if f then b.MouseButton1Click:Connect(f) end
   autobuttoncolor(b,fb,guiset.altcolor,guiset.select)
   return {
     fire = function() if f then f() end end,
@@ -225,35 +234,36 @@ end
 function library.toggle(t,p,f)
   local fb = knownframe:Clone()
   fb.Parent = p
-  local b = Instance.new("TextButton",fb)
-  local cb = Instance.new("Frame",b)
-  b.BackgroundTransparency = 1
-  b.Size = UDim2.new(.95,0,1,0)
-  b.AnchorPoint = Vector2.new(.5,.5)
-  b.Position = UDim2.new(.5,0,.5,0)
-  b.ClipsDescendants = true
-  b.TextXAlignment = "Left"
-  b.Text = t
-  b.TextSize = guiset.size
-  b.Font = guiset.font
-  b.TextColor3 = guiset.textcolor
-  cb.Size = UDim2.new(0,8,.8,0)
-  cb.BorderSizePixel = 0
-  cb.Position = UDim2.new(1,0,.5,0)
-  cb.AnchorPoint = Vector2.new(1,.5)
-  cb.BackgroundColor3 = Color3.fromRGB(255,0,0)
+  local b = mk("TextButton",fb,{
+    BackgroundTransparency = 1,
+    Size = UDim2.new(.95,0,1,0),
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextXAlignment = "Left",
+    ClipsDescendants = true,
+    Text = t,
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  local cb = mk("Frame",b,{
+    Size = UDim2.new(0,8,.8,0),
+    BorderSizePixel = 0,
+    Position = UDim2.new(1,0,.5,0),
+    AnchorPoint = Vector2.new(1,.5),
+    BackgroundColor3 = Color3.fromRGB(255,0,0)
+  })
   local on = false
-  local function a(v)
+  local function set(v)
+    if on == v then return end
     on = v
     ts:Create(cb,TweenInfo.new(.2),{BackgroundColor3 = v and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)}):Play()
     if f then f(v) end
   end
-  a(false)
-  b.MouseButton1Click:Connect(function() a(not on) end)
+  set(false)
+  b.MouseButton1Click:Connect(function() set(not on) end)
   autobuttoncolor(b,fb,guiset.altcolor,guiset.select)
   return {
     bool = function() return on end,
-    fire = function(_,v) a(v == nil and not on or not not v) end,
+    fire = function(_,v)set(v ~= nil and v or not on) end,
     destroy = function() fb:Destroy() end
   }
 end
@@ -261,32 +271,34 @@ end
 function library.textbox(t,t2,p,f)
   local fb = knownframe:Clone()
   fb.Parent = p
-  local l = Instance.new("TextLabel",fb)
-  local b = Instance.new("TextBox",fb)
-  l.BackgroundTransparency = 1
-  l.Position = UDim2.new(0,4,0,0)
-  l.Size = UDim2.new(0,0,1,0)
-  l.TextXAlignment = "Left"
-  l.TextColor3 = guiset.textcolor
-  l.ClipsDescendants = true
-  l.Text = t.." :"
-  l.TextSize = guiset.size
-  l.Font = guiset.font
-  l.AutomaticSize = "X"
-  b.BackgroundTransparency = 1
-  b.TextXAlignment = "Right"
-  b.PlaceholderText = t2
-  b.ClipsDescendants = true
-  b.Text = ""
-  b.TextSize = guiset.size
-  b.Font = guiset.font
-  b.TextColor3 = guiset.textcolor
-  task.wait()
+  local l = mk("TextLabel",fb,{
+    BackgroundTransparency = 1,
+    Position = UDim2.new(0,4,0,0),
+    Size = UDim2.new(0,0,1,0),
+    TextXAlignment = "Left",
+    ClipsDescendants = true,
+    Text = t.." :",
+    AutomaticSize = "X"
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  local b = mk("TextBox",fb,{
+    BackgroundTransparency = 1,
+    TextXAlignment = "Right",
+    PlaceholderText = t2,
+    ClipsDescendants = true,
+    Text = "",
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
   local pad = 5
-  local w = math.min(l.TextBounds.X + pad, fb.AbsoluteSize.X * .75)
-  l.Size = UDim2.new(0,w,1,0)
-  b.Position = UDim2.new(0,w + pad,0,0)
-  b.Size = UDim2.new(1,-(w + pad*2),1,0)
+  local function update()
+    local w = math.min(l.TextBounds.X + pad, fb.AbsoluteSize.X * .75)
+    l.Size = UDim2.new(0,w,1,0)
+    b.Position = UDim2.new(0,w + pad,0,0)
+    b.Size = UDim2.new(1,-(w + pad*2),1,0)
+  end
+  task.defer(update)
+  l:GetPropertyChangedSignal("TextBounds"):Connect(update)
+  fb:GetPropertyChangedSignal("AbsoluteSize"):Connect(update)
   b.FocusLost:Connect(function() if f then f(b.Text) end end)
   return {
     set = function(v) b.Text = tostring(v) end,
@@ -299,26 +311,24 @@ end
 function library.switch(t,p,f,lst)
   local fb = knownframe:Clone()
   fb.Parent = p
-  local b = Instance.new("TextButton",fb)
-  local l = Instance.new("TextLabel",fb)
-  b.BackgroundTransparency = 1
-  b.Size = UDim2.new(.95,0,1,0)
-  b.AnchorPoint = Vector2.new(.5,.5)
-  b.Position = UDim2.new(.5,0,.5,0)
-  b.TextXAlignment = "Left"
-  b.Text = t.." :"
-  b.TextSize = guiset.size
-  b.Font = guiset.font
-  b.TextColor3 = guiset.textcolor
-  b.ClipsDescendants = true
-  l.BackgroundTransparency = 1
-  l.Size = UDim2.new(.95,0,.8,0)
-  l.AnchorPoint = Vector2.new(.5,.5)
-  l.Position = UDim2.new(.5,0,.5,0)
-  l.TextXAlignment = "Right"
-  l.TextSize = guiset.size
-  l.Font = guiset.font
-  l.TextColor3 = guiset.textcolor
+  local b = mk("TextButton",fb,{
+    BackgroundTransparency = 1,
+    Size = UDim2.new(.95,0,1,0),
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextXAlignment = "Left",
+    Text = t.." :",
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+    ClipsDescendants = true,
+  })
+  local l = mk("TextLabel",fb,{
+    BackgroundTransparency = 1,
+    Size = UDim2.new(.95,0,.8,0),
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextXAlignment = "Right",
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
   autobuttoncolor(b,fb,guiset.altcolor,guiset.select)
   local i = 1
   local function a(x)
@@ -328,77 +338,76 @@ function library.switch(t,p,f,lst)
   end
   a(1)
   b.MouseButton1Click:Connect(function()
-    local n = i+1 > #lst and 1 or i+1
+    local n = (i + 1 > #lst) and 1 or (i + 1)
     a(n)
   end)
   return {
     bool = function() return lst[i] end,
     index = function() return i end,
     fire = function(v)
-      if v==nil then
-        a(i+1 > #lst and 1 or i+1)
-      elseif type(v)=="number" then
-        if lst[v] then a(v) end
+      if v == nil then a((i + 1 > #lst) and 1 or (i + 1))
+      elseif type(v) == "number" then if lst[v] then a(v) end
       else
         for k,val in ipairs(lst) do
-          if val==v then a(k) break end
+          if val == v then
+            a(k)
+            break
+          end
         end
       end
     end,
     set = function(v)
       for k,val in ipairs(lst) do
-        if val==v then a(k) break end
+        if val == v then
+          a(k)
+          break
+        end
       end
     end,
     destroy = function() fb:Destroy() end
   }
 end
 
-local markspot,active = {},{}
+local markspot, active = {}, {}
 function library.markdown(t,p,f,l,m)
-  m = m~=false
-
-  local a,id,bs = {},{},{}
+  m = m ~= false
+  local a = {}
+  local bs = {}
+  local id = {}
+  local c = 0
   local fb = knownframe:Clone()
   fb.Parent = p
-  local lbl = Instance.new("TextLabel",fb)
-  local btn = Instance.new("TextButton",fb)
-
-  lbl.BackgroundTransparency = 1
-  lbl.Position = UDim2.new(0,2,0,0)
-  lbl.Text = t.." :"
-  lbl.TextSize = guiset.size
-  lbl.Font = guiset.font
-  lbl.TextColor3 = guiset.textcolor
-  lbl.AutomaticSize = "X"
-  btn.Position = UDim2.new(1,-4,0,0)
-  btn.AnchorPoint = Vector2.new(1,0)
-  btn.Size = UDim2.new(1,-4,1,0)
-  btn.BackgroundTransparency = 1
-  btn.TextXAlignment = "Right"
-  btn.Text = "[ 0 ]"
-  btn.TextSize = guiset.size
-  btn.Font = guiset.font
-  btn.TextColor3 = guiset.textcolor
+  local lbl = mk("TextLabel",fb,{
+    BackgroundTransparency = 1,
+    Position = UDim2.new(0,2,0,0),
+    Text = t.." :",
+    AutomaticSize = "X",
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  local btn = mk("TextButton",fb,{
+    Position = UDim2.new(1,-4,0,0),
+    AnchorPoint = Vector2.new(1,0),
+    Size = UDim2.new(1,-4,1,0),
+    BackgroundTransparency = 1,
+    TextXAlignment = "Right",
+    Text = "[ 0 ]",
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
   autobuttoncolor(btn,fb,guiset.altcolor,guiset.select)
   task.wait()
-  local pad = 5
-  local w = math.min(lbl.TextBounds.X+pad,fb.AbsoluteSize.X*.75)
+  local w = math.min(lbl.TextBounds.X + 5, fb.AbsoluteSize.X * .75)
   lbl.Size = UDim2.new(0,w,1,0)
   markspot[id] = {}
-  local c = 0
-  for i=1,#l do
-    local it = l[i]
-    local b = Instance.new("TextButton",scrollmark)
-    b.Size = UDim2.new(1,0,0,20)
-    b.BackgroundColor3 = guiset.altcolor
-    b.BorderSizePixel = 0
-    b.Text = tostring(it)
-    b.TextSize = guiset.size
-    b.Font = guiset.font
-    b.TextColor3 = guiset.textcolor
-    b.Visible = false
-
+  local function newButton(it)
+    local b = mk("TextButton",scrollmark,{
+      Size = UDim2.new(1,0,0,20),
+      BorderSizePixel = 0,
+      Text = tostring(it),
+      Visible = false,
+      BackgroundColor3 = guiset.altcolor,
+      TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+    })
+    b._val = it
     markspot[id][#markspot[id]+1] = b
     bs[#bs+1] = b
     local s = false
@@ -408,8 +417,7 @@ function library.markdown(t,p,f,l,m)
         if s then a[it],c,b.BackgroundColor3 = true,c+1,guiset.select
         else a[it],c,b.BackgroundColor3 = nil,c-1,guiset.altcolor end
       else
-        if a[it] then
-          a[it],c,b.BackgroundColor3 = nil,0,guiset.altcolor
+        if a[it] then a[it],c,b.BackgroundColor3 = nil,0,guiset.altcolor
         else
           for _,o in ipairs(bs) do o.BackgroundColor3 = guiset.altcolor end
           table.clear(a)
@@ -420,154 +428,192 @@ function library.markdown(t,p,f,l,m)
       if f then f(a) end
     end)
   end
+  for i = 1, #l do newButton(l[i]) end
   btn.MouseButton1Click:Connect(function()
-    if active==id then
-      for _,v in ipairs(markspot[id]) do v.Visible=false end
-      frame2.Visible=false
-      active=nil
+    if active == id then
+      for _,v in ipairs(markspot[id]) do v.Visible = false end
+      frame2.Visible = false
+      active = nil
     else
       if active and markspot[active] then
-        for _,v in ipairs(markspot[active]) do v.Visible=false end
+        for _,v in ipairs(markspot[active]) do v.Visible = false end
       end
-      for _,v in ipairs(markspot[id]) do v.Visible=true end
-      frame2.Visible=true
-      active=id
+      for _,v in ipairs(markspot[id]) do v.Visible = true end
+      frame2.Visible = true
+      active = id
     end
   end)
   return {
     get = function() return a end,
-    destroy = function() fb:Destroy() end
+    update = function(newList)
+      local newMap = {}
+      for i = 1, #newList do newMap[newList[i]] = true end
+      for i = #bs, 1, -1 do
+        local b = bs[i]
+        local key = b._val
+        if not newMap[key] then
+          if a[key] then
+            a[key] = nil
+            c -= 1
+          end
+          b:Destroy()
+          table.remove(bs, i)
+          for j = #markspot[id], 1, -1 do
+            if markspot[id][j] == b then
+              table.remove(markspot[id], j)
+              break
+            end
+          end
+        else newMap[key] = nil
+        end
+      end
+      for i = 1, #newList do
+        local it = newList[i]
+        if newMap[it] then newButton(it) end
+      end
+      btn.Text = ("[ %d ]"):format(c)
+    end,
+    destroy = function()
+      for _,b in ipairs(bs) do b:Destroy() end
+      markspot[id] = nil
+      fb:Destroy()
+    end
   }
 end
 
 local notifytable = {}
 function library.notify(d,t)
-  local fb = Instance.new("Frame")
+  local fb = mk("Frame", gui, {
+    Size = UDim2.new(0,120,0,53),
+    Position = UDim2.new(1,100,1,-10),
+    AnchorPoint = Vector2.new(1,1),
+    BorderSizePixel = 1,
+    BackgroundTransparency = 1,
+    BorderColor3 = guiset.bordercolor,BackgroundColor3 = guiset.maincolor,
+  })
   notifytable[#notifytable+1] = fb
-  fb.Size = UDim2.new(0,120,0,53)
-  fb.Position = UDim2.new(1,100,1,-10)
-  fb.AnchorPoint = Vector2.new(1,1)
-  fb.BorderSizePixel = 1
-  fb.BorderColor3 = guiset.bordercolor
-  fb.BackgroundColor3 = guiset.maincolor
-  fb.BackgroundTransparency = 1
-  fb.Parent = gui
-  local b = Instance.new("TextButton",fb)
-  b.BackgroundTransparency = 1
-  b.TextTransparency = 1
-  b.Size = UDim2.new(.9,0,.9,0)
-  b.AnchorPoint = Vector2.new(.5,.5)
-  b.Position = UDim2.new(.5,0,.5,0)
-  b.TextColor3 = guiset.textcolor
-  b.TextWrapped = true
-  b.TextSize = guiset.size*1.15
-  b.Font = guiset.font
-  b.Text = "-"..tostring(t[1]).."-\n"..(t[2] and tostring(t[2]) or "")
+  local b = mk("TextButton", fb, {
+    BackgroundTransparency = 1,
+    TextTransparency = 1,
+    Size = UDim2.new(.9,0,.9,0),
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextWrapped = true,
+    TextColor3 = guiset.textcolor,TextSize = guiset.size * 1.15,Font = guiset.font,
+    Text = "-"..tostring(t[1]).."-\n"..(t[2] and tostring(t[2]) or ""),
+  })
   if #notifytable > 5 then
     local old = table.remove(notifytable,1)
     local ob = old:FindFirstChildOfClass("TextButton")
-    if ob then 
-    ts:Create(ob,guiset.tween,{TextTransparency=1}):Play()
-    end
-    ts:Create(old,guiset.tween,{BackgroundTransparency=1}):Play()
-    ts:Create(old,guiset.tween,{Position=UDim2.new(1,100,0,old.AbsolutePosition.Y)}):Play()
-    ts:Create(old,guiset.tween,{AnchorPoint=Vector2.new(.5,0)}):Play()
+    if ob then ts:Create(ob,guiset.tween,{TextTransparency = 1}):Play() end
+    ts:Create(old,guiset.tween,{BackgroundTransparency = 1}):Play()
+    ts:Create(old,guiset.tween,{Position = UDim2.new(1,100,0,old.AbsolutePosition.Y)}):Play()
+    ts:Create(old,guiset.tween,{AnchorPoint = Vector2.new(.5,0)}):Play()
     task.delay(guiset.tween.Time,function() old:Destroy() end)
   end
-  for i,f in ipairs(notifytable) do
-    ts:Create(f,guiset.tween,{Position = UDim2.new(1,-5,1,-10-57*(#notifytable-i))}):Play()
-  end
-  ts:Create(fb,guiset.tween,{BackgroundTransparency=.4}):Play()
-  ts:Create(b,guiset.tween,{TextTransparency=0}):Play()
+  for i,f in ipairs(notifytable) do ts:Create(f,guiset.tween,{Position = UDim2.new(1,-5,1,-10-57*(#notifytable-i))}):Play() end
+  ts:Create(fb, guiset.tween, {BackgroundTransparency = .4}):Play()
+  ts:Create(b, guiset.tween, {TextTransparency = 0}):Play()
   local function rem()
-    local i = table.find(notifytable,fb)
+    local i = table.find(notifytable, fb)
     if not i then return end
-    table.remove(notifytable,i)
-    ts:Create(fb,guiset.tween,{BackgroundTransparency=1}):Play()
-    ts:Create(b,guiset.tween,{TextTransparency=1}):Play()
-    for k,f in ipairs(notifytable) do
-      ts:Create(f,guiset.tween,{Position = UDim2.new(1,-5,1,-10-57*(#notifytable-k))}):Play()
-    end
+    table.remove(notifytable, i)
+    ts:Create(fb,guiset.tween,{BackgroundTransparency = 1}):Play()
+    ts:Create(b,guiset.tween,{TextTransparency = 1}):Play()
+    for k,f in ipairs(notifytable) do ts:Create(f,guiset.tween,{Position = UDim2.new(1,-5,1,-10-57*(#notifytable-k))}):Play() end
     task.wait(guiset.tween.Time)
     fb:Destroy()
   end
   b.MouseButton1Click:Connect(rem)
-  task.delay(d,rem)
+  task.delay(d, rem)
 end
 
 local activeslider = nil
 function library.slider(t,p,cb,cfg)
   cfg = type(cfg)=="table" and cfg or {}
   local min,max = cfg.min or 0,cfg.max or 1
+  if min == max then max = min + 1 end
   local tscl = cfg.truescale or false
   local cur = math.clamp(cfg.value or min,min,max)
+
   local fb = knownframe:Clone()
   fb.Size = UDim2.new(.95,0,0,28)
   fb.Parent = p
-  local sb = Instance.new("TextButton",fb)
-  local fl = Instance.new("Frame",sb)
-  local l = Instance.new("TextLabel",fb)
-  sb.Size = UDim2.new(.95,0,0,12)
-  sb.Position = UDim2.new(.5,0,.925,0)
-  sb.AnchorPoint = Vector2.new(.5,1)
-  sb.BorderSizePixel = 0
-  sb.BackgroundColor3 = Color3.fromRGB(80,80,80)
-  sb.ClipsDescendants = true
-  sb.Text = ""
-  sb.AutoButtonColor = false
-  fl.Size = UDim2.new((cur-min)/(max-min),0,1,0)
-  fl.BorderSizePixel = 0
-  fl.BackgroundColor3 = Color3.fromRGB(160,160,160)
-  l.Size = UDim2.new(1,0,0,14)
-  l.BackgroundTransparency = 1
-  l.TextColor3 = guiset.textcolor
-  l.ClipsDescendants = true
-  l.TextSize = guiset.size
-  l.Font = guiset.font
+  local sb = mk("TextButton",fb,{
+    Size = UDim2.new(.95,0,0,12),
+    Position = UDim2.new(.5,0,.925,0),
+    AnchorPoint = Vector2.new(.5,1),
+    BorderSizePixel = 0,
+    BackgroundColor3 = gray1,
+    ClipsDescendants = true,
+    Text = "",
+    AutoButtonColor = false
+  })
+  local fl = mk("Frame",sb,{BorderSizePixel = 0,BackgroundColor3 = gray2})
+  local l = mk("TextLabel",fb,{
+    Size = UDim2.new(1,0,0,14),
+    BackgroundTransparency = 1,
+    ClipsDescendants = true,
+    TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
+  })
+  local function scale(v) return (v-min)/(max-min) end
   local function set(v,s)
-    if s then
-      v = math.clamp(v,0,1);v = min+(max-min)*v
-    else
-      v = math.clamp(v,min,max)
+    if s then v = math.clamp(v,0,1);v = min + (max-min)*v
+    else v = math.clamp(v,min,max)
     end
     if not tscl then v = math.round(v) end
+    if v == cur then return end
     cur = v
-    fl.Size = UDim2.new((v-min)/(max-min),0,1,0)
+    fl.Size = UDim2.new(scale(v),0,1,0)
     l.Text = t.." : "..rounded(v)
     if cb then cb(v) end
   end
+  fl.Size = UDim2.new(scale(cur),0,1,0)
   l.Text = t.." : "..rounded(cur)
   if cb then cb(cur) end
-  local drag,inp
+  local inp
   sb.InputBegan:Connect(function(i)
     local ty = i.UserInputType
-    if not inp and (activeslider == nil or activeslider == sb) and (ty==Enum.UserInputType.MouseButton1 or ty==Enum.UserInputType.Touch) then
-      inp,drag,activeslider = i,true,sb
+    if inp then return end
+    if activeslider and activeslider ~= sb then return end
+    if ty==Enum.UserInputType.MouseButton1 or ty==Enum.UserInputType.Touch then
+      inp = i
+      activeslider = sb
       p.ScrollingEnabled = false
       set((i.Position.X - sb.AbsolutePosition.X)/sb.AbsoluteSize.X,true)
     end
   end)
   uis.InputEnded:Connect(function(i)
+    if inp ~= i then return end
     local ty = i.UserInputType
-    if inp==i and (ty==Enum.UserInputType.MouseButton1 or ty==Enum.UserInputType.Touch) then
-      inp,drag,activeslider = nil,false, nil
+    if ty==Enum.UserInputType.MouseButton1 or ty==Enum.UserInputType.Touch then
+      inp = nil
+      activeslider = nil
       p.ScrollingEnabled = true
     end
   end)
   uis.InputChanged:Connect(function(i)
-    if inp==i and drag and activeslider == sb then
-      local x = i.UserInputType==Enum.UserInputType.MouseMovement and uis:GetMouseLocation().X or i.Position.X
-      set((x - sb.AbsolutePosition.X)/sb.AbsoluteSize.X,true)
-    end
+    if inp ~= i then return end
+    if activeslider ~= sb then return end
+    local ty = i.UserInputType
+    if ty ~= Enum.UserInputType.MouseMovement and ty ~= Enum.UserInputType.Touch then return end
+    local x = (ty==Enum.UserInputType.MouseMovement and uis:GetMouseLocation().X or i.Position.X)
+    set((x - sb.AbsolutePosition.X)/sb.AbsoluteSize.X,true)
   end)
   return {
     value = function() return cur end,
-    scale = function() return (cur-min)/(max-min) end,
+    scale = function() return scale(cur) end,
     fire = function(v,s)
-      if v~=nil then set(v,s)
+      if v ~= nil then set(v,s)
       elseif cb then cb(cur) end
     end,
-    destroy = function() fb:Destroy() end
+    destroy = function()
+      if activeslider == sb then
+        activeslider = nil
+        p.ScrollingEnabled = true
+      end
+      fb:Destroy()
+    end
   }
 end
 
@@ -575,18 +621,21 @@ function library.label(t,p)
   local fb = knownframe:Clone()
   fb.Size = UDim2.new(.95,0,0,12)
   fb.Parent = p
-  local l = Instance.new("TextLabel",fb)
-  l.BackgroundTransparency = 1
-  l.Size = UDim2.new(.95,0,.8,0)
-  l.AnchorPoint = Vector2.new(.5,.5)
-  l.Position = UDim2.new(.5,0,.5,0)
-  l.TextXAlignment = "Center"
-  l.ClipsDescendants = true
-  l.TextColor3 = guiset.textcolor
-  l.Active = false
-  l.Text = "- "..t.." -"
-  l.TextSize = guiset.size
-  l.Font = guiset.font
+  local l = mk("TextLabel", fb, {
+    Size = UDim2.new(.95,0,.8,0),
+    BackgroundTransparency = 1,
+    AnchorPoint = Vector2.new(.5,.5),
+    Position = UDim2.new(.5,0,.5,0),
+    TextXAlignment = "Center",
+    ClipsDescendants = true,
+    Active = false,
+    TextColor3 = guiset.textcolor,TextSize = guiset.size,Font = guiset.font,
+  })
+
+  l:GetPropertyChangedSignal("TextBounds"):Connect(function()
+    fb.Size = UDim2.new(.95,0,0,math.min(l.TextBounds.Y + 5, 12))
+  end)
+  l.Text = t
   return l
 end
 
