@@ -82,11 +82,8 @@ local scrollmark = mk("ScrollingFrame",frame2,{
   ScrollingDirection = "Y",
   AutomaticCanvasSize = "Y",
 })
-local pad = mk("UIPadding",scrollmark,{
-  PaddingTop = UDim.new(0,4),
-  PaddingBottom = UDim.new(0,5)
-})
-local grid = mk("UIGridLayout",scrollmark,{
+mk("UIPadding",scrollmark,{PaddingTop = UDim.new(0,4),PaddingBottom = UDim.new(0,5)})
+mk("UIGridLayout",scrollmark,{
   CellSize = UDim2.new(.5,-4,0,22),
   CellPadding = UDim2.new(0,3,0,3),
   FillDirection = "Horizontal",
@@ -154,29 +151,28 @@ uis.InputChanged:Connect(function(i)
   end
 end)
 
-local scrollTab = Instance.new("ScrollingFrame")
-scrollTab.BorderSizePixel = 1
-scrollTab.BorderColor3 = guiset.bordercolor
-scrollTab.Size = UDim2.new(1,0,0,22)
-scrollTab.Position = UDim2.new(0,0,0,-23)
-scrollTab.CanvasSize = UDim2.new(0,0,0,0)
-scrollTab.BackgroundColor3 = guiset.maincolor
-scrollTab.ScrollingDirection = "X"
-scrollTab.AutomaticCanvasSize = "X"
-scrollTab.ScrollBarThickness = 0
-scrollTab.Parent = frame
-local tablist = Instance.new("UIListLayout",scrollTab)
-tablist.Padding = UDim.new(0,0)
-tablist.SortOrder = "LayoutOrder"
-tablist.FillDirection = "Horizontal"
-tablist.HorizontalAlignment = "Left"
-
-local knownframe = Instance.new("Frame")
-knownframe.Size = UDim2.new(.95,0,0,20)
-knownframe.AnchorPoint = Vector2.new(.5,0)
-knownframe.BorderSizePixel = 0
-knownframe.BackgroundColor3 = guiset.altcolor
-
+local scrollTab = mk("ScrollingFrame",frame,{
+  BorderSizePixel = 1,
+  Size = UDim2.new(1,0,0,22),
+  Position = UDim2.new(0,0,0,-23),
+  CanvasSize = UDim2.new(0,0,0,0),
+  ScrollingDirection = "X",
+  AutomaticCanvasSize = "X",
+  ScrollBarThickness = 0,
+  BackgroundColor3 = guiset.maincolor,BorderColor3 = guiset.bordercolor,
+})
+mk("TextButton",scrolltab,{
+  Padding = UDim.new(0,0),
+  SortOrder = "LayoutOrder",
+  FillDirection = "Horizontal",
+  HorizontalAlignment = "Left",
+})
+local knownframe = mk("TextButton",nil,{
+  Size = UDim2.new(.95,0,0,20),
+  AnchorPoint = Vector2.new(.5,0),
+  BorderSizePixel = 0,
+  BackgroundColor3 = guiset.altcolor,
+})
 local library = {}
 local tabList = {}
 function library.createTab(name)
@@ -249,7 +245,7 @@ function library.toggle(t,p,f)
     BorderSizePixel = 0,
     Position = UDim2.new(1,0,.5,0),
     AnchorPoint = Vector2.new(1,.5),
-    BackgroundColor3 = Color3.fromRGB(255,0,0)
+    BackgroundColor3 = Color3.fromRGB(255,0,0),
   })
   local on = false
   local function set(v)
@@ -278,7 +274,7 @@ function library.textbox(t,t2,p,f)
     TextXAlignment = "Left",
     ClipsDescendants = true,
     Text = t.." :",
-    AutomaticSize = "X"
+    AutomaticSize = "X",
     TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
   })
   local b = mk("TextBox",fb,{
