@@ -171,6 +171,7 @@ local knownframe = mk("Frame",nil,{
   Size = UDim2.new(.95,0,0,20),
   AnchorPoint = Vector2.new(.5,0),
   BorderSizePixel = 0,
+  ClipsDescendants = true,
   BackgroundColor3 = guiset.altcolor,
 })
 local library = {}
@@ -623,7 +624,6 @@ function library.label(t,p)
     AnchorPoint = Vector2.new(.5,.5),
     Position = UDim2.new(.5,0,.5,0),
     TextXAlignment = "Center",
-    ClipsDescendants = true,
     Active = false,
     TextColor3 = guiset.textcolor,TextSize = guiset.size,Font = guiset.font,
   })
