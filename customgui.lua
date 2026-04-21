@@ -161,13 +161,13 @@ local scrollTab = mk("ScrollingFrame",frame,{
   ScrollBarThickness = 0,
   BackgroundColor3 = guiset.maincolor,BorderColor3 = guiset.bordercolor,
 })
-mk("TextButton",scrolltab,{
+mk("UIListLayout",scrolltab,{
   Padding = UDim.new(0,0),
   SortOrder = "LayoutOrder",
   FillDirection = "Horizontal",
   HorizontalAlignment = "Left",
 })
-local knownframe = mk("TextButton",nil,{
+local knownframe = mk("Frame",nil,{
   Size = UDim2.new(.95,0,0,20),
   AnchorPoint = Vector2.new(.5,0),
   BorderSizePixel = 0,
