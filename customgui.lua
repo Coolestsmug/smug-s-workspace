@@ -370,6 +370,7 @@ function library.markdown(t,p,f,l,m)
   m = m ~= false
   local a = {}
   local bs = {}
+  local valMap = {}
   local id = {}
   local c = 0
   local fb = knownframe:Clone()
@@ -404,21 +405,27 @@ function library.markdown(t,p,f,l,m)
       BackgroundColor3 = guiset.altcolor,
       TextSize = guiset.size,Font = guiset.font,TextColor3 = guiset.textcolor,
     })
-    b._val = it
+    valMap[b] = it
     markspot[id][#markspot[id]+1] = b
     bs[#bs+1] = b
     local s = false
     b.MouseButton1Click:Connect(function()
+      local key = valMap[b]
+      if not key then return end
       if m then
         s = not s
-        if s then a[it],c,b.BackgroundColor3 = true,c+1,guiset.select
-        else a[it],c,b.BackgroundColor3 = nil,c-1,guiset.altcolor end
+        if s then
+          a[key],c,b.BackgroundColor3 = true,c+1,guiset.select
+        else
+          a[key],c,b.BackgroundColor3 = nil,c-1,guiset.altcolor
+        end
       else
-        if a[it] then a[it],c,b.BackgroundColor3 = nil,0,guiset.altcolor
+        if a[key] then
+          a[key],c,b.BackgroundColor3 = nil,0,guiset.altcolor
         else
           for _,o in ipairs(bs) do o.BackgroundColor3 = guiset.altcolor end
           table.clear(a)
-          a[it],c,b.BackgroundColor3 = true,1,guiset.select
+          a[key],c,b.BackgroundColor3 = true,1,guiset.select
         end
       end
       btn.Text = ("[ %d ]"):format(c)
@@ -447,12 +454,13 @@ function library.markdown(t,p,f,l,m)
       for i = 1, #newList do newMap[newList[i]] = true end
       for i = #bs, 1, -1 do
         local b = bs[i]
-        local key = b._val
+        local key = valMap[b]
         if not newMap[key] then
           if a[key] then
             a[key] = nil
             c -= 1
           end
+          valMap[b] = nil
           b:Destroy()
           table.remove(bs, i)
           for j = #markspot[id], 1, -1 do
@@ -461,17 +469,23 @@ function library.markdown(t,p,f,l,m)
               break
             end
           end
-        else newMap[key] = nil
+        else
+          newMap[key] = nil
         end
       end
       for i = 1, #newList do
         local it = newList[i]
-        if newMap[it] then newButton(it) end
+        if newMap[it] then
+          newButton(it)
+        end
       end
       btn.Text = ("[ %d ]"):format(c)
     end,
     destroy = function()
-      for _,b in ipairs(bs) do b:Destroy() end
+      for _,b in ipairs(bs) do
+        valMap[b] = nil
+        b:Destroy()
+      end
       markspot[id] = nil
       fb:Destroy()
     end
