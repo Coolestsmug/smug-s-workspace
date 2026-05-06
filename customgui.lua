@@ -555,12 +555,12 @@ function library.slider(t,p,cb,cfg)
     Position = UDim2.new(.5,0,.925,0),
     AnchorPoint = Vector2.new(.5,1),
     BorderSizePixel = 0,
-    BackgroundColor3 = gray1,
+    BackgroundColor3 = guiset.gray1,
     ClipsDescendants = true,
     Text = "",
     AutoButtonColor = false
   })
-  local fl = mk("Frame",sb,{BorderSizePixel = 0,BackgroundColor3 = gray2})
+  local fl = mk("Frame",sb,{BorderSizePixel = 0,BackgroundColor3 = guiset.gray2})
   local l = mk("TextLabel",fb,{
     Size = UDim2.new(1,0,0,14),
     BackgroundTransparency = 1,
